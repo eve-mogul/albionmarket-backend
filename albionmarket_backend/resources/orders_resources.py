@@ -2,18 +2,21 @@
 
 from flask_restful import Resource
 from sqlalchemy import not_
+from flask_caching import Cache
 
 from .orders_stats import fetch_item_market_stats
 from ..models import Item
 
+cache = Cache(config={'CACHE_TYPE': 'redis'})
 
 class OrdersResourcesV1(Resource):
     def get(self):
         resources = Item.query.filter(not_(Item.id.like('%_LEVEL%'))).filter_by(category_id='resources')
-
+        
         results = []
-
         for item in resources:
+            #stats = cache.get('order_resources'. item.id);
+
             stats = {
                 'stats': fetch_item_market_stats(item.id),
                 'item': {

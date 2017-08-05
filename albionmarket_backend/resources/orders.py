@@ -5,6 +5,7 @@ from datetime import datetime
 from flask_restful import Resource, abort
 
 from .orders_stats import fetch_item_market_stats
+from .orders_ohlc import fetch_item_ohlc_stats
 from ..models import MarketOrder, Item
 
 
@@ -57,7 +58,8 @@ class OrdersV1(Resource):
                 'buy': fetch_item_orders(item_id, True),
                 'sell': fetch_item_orders(item_id, False),
             },
-            'stats': fetch_item_market_stats(item_id)
+            'stats': fetch_item_market_stats(item_id),
+            'ohlc': fetch_item_ohlc_stats(item_id)
         }
 
         return data, 200
